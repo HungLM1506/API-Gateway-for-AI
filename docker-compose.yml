@@ -1,0 +1,26 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "8001:8001"
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      - fastapi
+
+  nginx:
+    image: nginx:latest
+    container_name: reverse_proxy_nginx
+    ports:
+      - "8445:8445" # Map cổng HTTPS
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro # Mount cấu hình Nginx
+      - ./ssl/server.crt:/etc/nginx/ssl/server.crt:ro # Mount chứng chỉ SSL
+      - ./ssl/server.key:/etc/nginx/ssl/server.key:ro # Mount private key

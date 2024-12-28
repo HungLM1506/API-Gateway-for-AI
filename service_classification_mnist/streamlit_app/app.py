@@ -17,7 +17,7 @@ if uploaded_file:
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             response = requests.post(
-                "http://localhost:8000/predict/",
+                "http://localhost:8001/predict/",
                 files={"file": uploaded_file.getvalue()},
             )
             if response.status_code == 200:
